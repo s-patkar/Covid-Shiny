@@ -1,0 +1,66 @@
+---
+title: "Covid 19 tracking and economic impact analysis"
+author: "Shreeram Patkr"
+date: "6/20/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+library(ggthemes)
+worldometer_raw <- read_csv("worldometer_coronavirus_daily_data.csv")
+econ_raw <- read_csv("economic_freedom_index2019_data.csv")
+```
+
+
+
+```{r cars, echo = FALSE}
+econ_rename <- econ_raw %>% 
+  rename("country" = "Country Name",
+         "region" = "Region",
+         "GDPPC" = "GDP per Capita (PPP)",
+         "pop" = "Population (Millions)",
+         "rrank" = "Region Rank",
+         "prop_right" = "Property Rights",
+         "jud_eff" = "Judical Effectiveness",
+         "unemp" = "Unemployment (%)",
+         "ffree" = "Financial Freedom")
+
+
+full_raw <- inner_join(x = worldometer_raw, y = econ_rename, by = "country") %>% 
+select("date", "country", "daily_new_cases",
+       "cumulative_total_deaths", "cumulative_total_cases",
+       "GDPPC", "region", "pop", "rrank", "prop_right",
+       "jud_eff", "unemp", "ffree") 
+  
+
+
+short_raw <- full_raw %>% 
+  filter(date == "2021-6-11") %>% 
+  filter(cumulative_total_cases > 100) %>% 
+  filter(country != "India",  country != "China", country != "Yemen") %>% 
+  mutate(death_rate = cumulative_total_deaths/cumulative_total_cases)%>% 
+  mutate(infec_rate = cumulative_total_cases/(as.numeric(pop)*1000000))
+
+econ_plot <- short_raw %>% 
+  ggplot(aes(x= as.numeric(unemp), y = death_rate,
+             text = paste("Country:", country, "\n",
+             "Death Rate:", paste(format(round(death_rate*100, 2), nsmall = 2), "%"), "\n",
+             "GDPPC:", GDPPC, "\n",
+             "Total Deaths:", cumulative_total_deaths, "\n",
+             "Total Cases:", cumulative_total_cases, "\n",
+             "Population:", pop)))+
+  geom_point()+
+  geom_smooth(na.rm = TRUE)+
+  facet_wrap(~region)+
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1))
+
+ggplotly(econ_plot, tooltip = "text")
+```
+
+
+
+
