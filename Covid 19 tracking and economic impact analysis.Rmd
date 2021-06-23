@@ -13,6 +13,7 @@ library(plotly)
 library(ggthemes)
 worldometer_raw <- read_csv("worldometer_coronavirus_daily_data.csv")
 econ_raw <- read_csv("economic_freedom_index2019_data.csv")
+lifex_raw <- read_csv("Life Expectancy Data.csv")
 ```
 
 
@@ -38,15 +39,29 @@ select("date", "country", "daily_new_cases",
   
 
 
-short_raw <- full_raw %>% 
+lifex_raw <- lifex_raw %>% 
+  filter(Year == "2015") %>% 
+  rename("life_ex" = "Life expectancy",
+         "inf_mort" = "infant deaths", 
+         "country" = "Country") %>% 
+  select("life_ex", "inf_mort", "country")
+  
+
+
+short_raw <- inner_join(full_raw, lifex_raw, by = "country") %>% 
   filter(date == "2021-6-11") %>% 
   filter(cumulative_total_cases > 100) %>% 
-  filter(country != "India",  country != "China", country != "Yemen") %>% 
+  #filter(country != "India",  country != "China", country != "Yemen") %>% 
   mutate(death_rate = cumulative_total_deaths/cumulative_total_cases)%>% 
   mutate(infec_rate = cumulative_total_cases/(as.numeric(pop)*1000000))
 
+
+
+anti_join(short_raw,lifex_raw, by = "country")
+
+
 econ_plot <- short_raw %>% 
-  ggplot(aes(x= as.numeric(unemp), y = death_rate,
+  ggplot(aes(x= as.numeric(pop), y = death_rate,
              text = paste("Country:", country, "\n",
              "Death Rate:", paste(format(round(death_rate*100, 2), nsmall = 2), "%"), "\n",
              "GDPPC:", GDPPC, "\n",
