@@ -5,9 +5,9 @@ account: spatkar
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 4311851
-bundleId: 4753487
+bundleId: 4753595
 url: https://spatkar.shinyapps.io/Covid-Shiny/
-when: 1624574894.62019
-lastSyncTime: 1624574894.62019
+when: 1624576773.61845
+lastSyncTime: 1624576773.61845
 asMultiple: FALSE
 asStatic: FALSE
