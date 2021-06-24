@@ -137,8 +137,12 @@ ui <- navbarPage("Covid TrackR",
                                                 h5("Scraped Kaggle URL:"),a("https://www.kaggle.com/josephassaker/covid19
                                                         -global-dataset?select=worldometer_coronavirus_daily_data.csv"),
                                                 h5("Original Source URL:"),a("worldometers.info")
+                                         ),
+                                         column(2, offset =0, 
+                                                img(src='worldometer.jpg', height = 200, width = 200))
+                                       ))
                                        
-                                     )))),
+                                     ),
                             tabPanel("Source B", 
                                      fluidPage(
                                        fluidRow(
@@ -150,8 +154,11 @@ ui <- navbarPage("Covid TrackR",
                                                 h5("Scraped Kaggle URL:"),a("https://www.kaggle.com/lewisduncan93/
                                                                             the-economic-freedom-index"),
                                                 h5("Original Source URL:"),a("https://www.heritage.org/index")
-                                                
-                                         )))
+                                         ),
+                                         column(2, offset =0, 
+                                                img(src='heritage.png', height = 200, width = 450))
+                                         
+                                        ))
                                      
                                      ),
                             tabPanel("Source C", 
@@ -166,8 +173,11 @@ ui <- navbarPage("Covid TrackR",
                                                 h5("Scraped Kaggle URL:"),a("https://www.kaggle.com/kumarajarshi/life-expectancy-who"),
                                                 h5("Original Source URL:"),a("https://www.who.int/data/gho/data/indicators/
                                                                              indicator-details/GHO/life-expectancy-at-birth-(years)")
+                                        ),
+                                         column(2, offset =0, 
+                                                img(src='who.png', height = 200, width = 200))
                                                 
-                                         )))
+                                         ))
                                      
                                      )
                             )
