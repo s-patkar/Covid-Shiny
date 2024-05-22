@@ -213,7 +213,7 @@ server <- function(input, output) { #server argument of ShinyApp
   
   
   output$selected_var <- renderText({ #rendering plot
-    paste("You have selected", input$var, "vs." , input$vary)
+    paste("You have selected", input$var, "vs." , input$vary, ". Hover over data points for moe information")
   }) 
   
   
